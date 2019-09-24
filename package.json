@@ -1,0 +1,70 @@
+{
+  "name": "the-problematic-api",
+  "description": "Problems? We GET them. Answers? You POST them.",
+  "version": "0.0.0",
+  "author": "Antonin Krivohlavy <antonin.krivohlavy@gmail.com",
+  "engines": {
+    "node": "^12.4.0"
+  },
+  "scripts": {
+    "start": "npm run app:start",
+    "start-lr": "tsc-watch --onSuccess \"npm run start\"",
+    "test": "npm run app:test",
+    "test-lr": "npm run app:test -- --watch",
+    "app:compile": "tsc",
+    "app:start": "cross-env NODE_PATH=dist node -r source-map-support/register dist/index.js",
+    "app:test": "cross-env NODE_PATH=src jest --detectOpenHandles --forceExit",
+    "ci-test": "npm run cover -- --reporters=default --reporters=jest-junit --ci",
+    "ci-lint": "tslint -p . --force -t checkstyle -o ./output/checkstyle-result.xml",
+    "lint": "tslint -p . -t codeFrame",
+    "cover": "npm run app:test -- --collectCoverage",
+    "check": "npm-check -i app -i errors -i config -i index; exit 0",
+    "check-win": "npm-check -i app -i errors -i config -i index & exit 0",
+    "pretty": "prettier --write \"src/**/*.ts\""
+  },
+  "jest-junit": {
+    "outputDirectory": "output",
+    "outputName": "./test.xml",
+    "classNameTemplate": "{classname}",
+    "titleTemplate": "{title}",
+    "ancestorSeparator": " > ",
+    "usePathForSuiteName": "true"
+  },
+  "dependencies": {
+    "@types/express": "^4.16.1",
+    "@types/lodash": "^4.14.138",
+    "compose-middleware": "^5.0.1",
+    "configuru": "^0.2.2",
+    "cosmas": "^1.1.0",
+    "desmond": "^0.5.6",
+    "lodash": "^4.17.15",
+    "node-healthz": "^1.0.1",
+    "npm-run-series": "^1.0.1",
+    "source-map-support": "^0.5.13",
+    "tsc-watch": "^2.4.0",
+    "unicore": "^0.1.7"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.13",
+    "@types/node": "^12.0.8",
+    "@types/supertest-as-promised": "^2.0.36",
+    "concurrently": "^4.1.0",
+    "cross-env": "^5.1.6",
+    "husky": "^2.7.0",
+    "jest": "^24.9.0",
+    "jest-chain": "^1.1.2",
+    "jest-extended": "^0.11.2",
+    "jest-junit": "^6.4.0",
+    "lint-staged": "^8.2.1",
+    "npm-check": "^5.8.0",
+    "prettier": "^1.15.1",
+    "prettier-config-ackee": "0.0.13",
+    "supertest": "^4.0.2",
+    "supertest-as-promised": "^4.0.2",
+    "ts-jest": "^24.0.1",
+    "tsconfig-paths": "^3.8.0",
+    "tslint": "^5.12.0",
+    "tslint-config-ackee": "^0.3.0",
+    "typescript": "^3.6.2"
+  }
+}
