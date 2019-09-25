@@ -42,14 +42,18 @@
     "lodash": "^4.17.15",
     "node-healthz": "^1.0.1",
     "npm-run-series": "^1.0.1",
+    "sequelize": "^5.19.0",
     "source-map-support": "^0.5.13",
+    "sqlite3": "^4.1.0",
     "tsc-watch": "^2.4.0",
     "unicore": "^0.1.7"
   },
   "devDependencies": {
+    "@types/bluebird": "^3.5.27",
     "@types/jest": "^24.0.13",
     "@types/node": "^12.0.8",
     "@types/supertest-as-promised": "^2.0.36",
+    "@types/validator": "^10.11.3",
     "concurrently": "^4.1.0",
     "cross-env": "^5.1.6",
     "husky": "^2.7.0",
