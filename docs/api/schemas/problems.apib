@@ -1,12 +1,12 @@
 
-## Problem (object)
+## Problem.Base (object)
 + id: 1 (number) - An unique identifier of the Problem
-+ answered (boolean) - Does the question have any answers?
++ type: `riddle` (string, required)
++ query: `If two is a company and three is a crowd. What is four and five?` (string, required) - Body of the problem
++ createdBy: `Alice` (string) - Username of the user who created this problem
++ answered: (boolean) - Does the question have any answers?
 
 
 ## Problem.Create (object)
 + type: `riddle` (string, required)
-
-    Body of the problem
-
-+ query: `If two is a company and three is a crowd. What is four and five?` (string, required)
++ query: `If two is a company and three is a crowd. What is four and five?` (string, required) -  Body of the problem
