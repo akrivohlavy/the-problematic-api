@@ -10,4 +10,6 @@ router.all('/hello', helloController.anyHello);
 router.get('/problems', problemController.listProblems);
 router.post('/problems', problemController.createProblem);
 
+router.get('/problems/:id', problemController.getProblem);
+
 export default router;

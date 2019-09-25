@@ -1,20 +1,8 @@
 import { HttpContext } from 'app/controllers/utils/httpContext';
-
+import { NotFound } from '../errors/classes';
 import Problem from '../models/Problem';
 
-const problemToSchema = ({
-    id,
-    type,
-    query,
-    createdBy = 'unknown',
-    answered = false,
-}: {
-    id: number;
-    type: string;
-    query: string;
-    createdBy: string;
-    answered: boolean;
-}) => ({
+const problemToSchema = ({ id, type, query, createdBy = 'unknown', answered = false }: Problem) => ({
     id,
     type,
     query,
@@ -36,4 +24,12 @@ export const createProblem = async (_params: any, context: HttpContext) => {
 export const listProblems = async (_params: any) => {
     const problems = await Problem.findAll();
     return problems.map(problemToSchema);
+};
+
+export const getProblem = async (_params: any) => {
+    const problem = await Problem.findByPk(_params.id);
+    if (!problem) {
+        throw new NotFound();
+    }
+    return problemToSchema(problem);
 };
