@@ -16,3 +16,8 @@ export const getProblem = pipeMiddleware(
     bindContext,
     respond(({ context }) => problemService.getProblem(context.params))
 );
+
+export const updateProblem = pipeMiddleware(
+    bindContext,
+    respond(({ context }) => problemService.updateProblem(context.params, context))
+);

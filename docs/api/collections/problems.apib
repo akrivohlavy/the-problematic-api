@@ -23,7 +23,7 @@ User can create a Problem.
         Authorization: Basic ABC123
     + Attributes(Problem.Create)
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
     + Attributes (Problem.Base)
 
 ### Read Existing Problem [GET /problems/{id}]
@@ -42,9 +42,10 @@ A Problem contains information about the type of problem, its query and whether 
 ### Update Problem [PUT /problems/{id}] 
 User can update a Problem. Only user that originally created the Problem is allowed to update it.
 
-+ Request
++ Request (application/json)
     + Headers
         Authorization: Basic ABC123
+    + Attributes(Problem.Create)
 
 + Response 200 (application/json)
     + Attributes (Problem.Base)
