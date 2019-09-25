@@ -1,9 +1,17 @@
-## Problems Collection [/problems]
+## Problems [/problems]
+
++ Attributes (array[Problem.Base])
 
 ### List All Problems [GET]
 
 + Parameters
-    + type (string) - TODO: enum
-    + answered (boolean)
+    + type (string, optional) - `"riddle"` or `"expression"`
+    + answered (boolean, optional)
+
++ Request
+    + Headers
+        Authorization: Basic ABC123
 
 + Response 200 (application/json)
+    + Attributes (Problems)
+
