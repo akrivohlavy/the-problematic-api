@@ -1,5 +1,5 @@
 import * as problemService from 'app/services/problem.service';
-import { OK } from 'http-status-codes';
+import { NO_CONTENT, OK } from 'http-status-codes';
 import { bindContext, pipeMiddleware, respond, respondWithEmpty } from '../utils/controllerUtils';
 
 export const listProblems = pipeMiddleware(
@@ -20,4 +20,9 @@ export const getProblem = pipeMiddleware(
 export const updateProblem = pipeMiddleware(
     bindContext,
     respond(({ context }) => problemService.updateProblem(context.params, context))
+);
+
+export const deleteProblem = pipeMiddleware(
+    bindContext,
+    respond(({ context }) => problemService.deleteProblem(context.params), NO_CONTENT)
 );

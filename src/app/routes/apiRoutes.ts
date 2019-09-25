@@ -12,5 +12,6 @@ router.post('/problems', problemController.createProblem);
 
 router.get('/problems/:id', problemController.getProblem);
 router.put('/problems/:id', problemController.updateProblem);
+router.delete('/problems/:id', problemController.deleteProblem);
 
 export default router;

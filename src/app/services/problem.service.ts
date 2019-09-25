@@ -10,6 +10,14 @@ const problemToSchema = ({ id, type, query, createdBy = 'unknown', answered = fa
     answered,
 });
 
+const loadProblem = async (id: number): Promise<Problem> => {
+    const problem = await Problem.findByPk(id);
+    if (!problem) {
+        throw new NotFound();
+    }
+    return problem;
+};
+
 export const createProblem = async (_params: any, context: HttpContext) => {
     const { type, query } = context.payload;
     const newProblem = await Problem.create({
@@ -27,27 +35,23 @@ export const listProblems = async (_params: any) => {
 };
 
 export const getProblem = async (_params: any) => {
-    const problem = await Problem.findByPk(_params.id);
-    if (!problem) {
-        throw new NotFound();
-    }
+    const problem = await loadProblem(_params.id);
     return problemToSchema(problem);
 };
 
 export const updateProblem = async (_params: any, context: HttpContext) => {
     const { type, query } = context.payload;
-    const problem = await Problem.findByPk(_params.id);
-    if (!problem) {
-        throw new NotFound();
-    }
-    // TODO: replace naive comparison with iteration
+    const problem = await loadProblem(_params.id);
+
+    // TODO: replace naive comparison and assignment with iteration
     if (type === problem.type && query === problem.query) {
         throw new NotModified();
     }
-
-    problem.type = type;
-    problem.query = query;
-    await problem.save();
-
+    await problem.update({ type, query });
     return problemToSchema(problem);
+};
+
+export const deleteProblem = async (_params: any) => {
+    const problem = await loadProblem(_params.id);
+    await problem.destroy(); // this is in fact a soft-delete by default
 };
