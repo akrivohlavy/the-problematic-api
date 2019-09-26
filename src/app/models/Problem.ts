@@ -1,6 +1,8 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from './index';
 
+const tableName = 'problems';
+
 export default class Problem extends Model {
     public id!: number;
     public type!: string;
@@ -34,6 +36,6 @@ Problem.init(
     },
     {
         sequelize,
-        tableName: 'problems',
+        tableName,
     }
 );

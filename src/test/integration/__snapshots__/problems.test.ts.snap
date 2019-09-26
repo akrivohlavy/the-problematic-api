@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Problems (Integration) User can create a Problem 1`] = `
+Object {
+  "answered": false,
+  "createdBy": "unknown",
+  "id": 1,
+  "query": "U WOT M8?",
+  "type": "riddle",
+}
+`;
+
+exports[`Problems (Integration) User can list Problems 1`] = `
+Array [
+  Object {
+    "answered": false,
+    "createdBy": "unknown",
+    "id": 1,
+    "query": "U WOT M8?",
+    "type": "riddle",
+  },
+]
+`;
