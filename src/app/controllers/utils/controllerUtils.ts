@@ -1,5 +1,6 @@
 import { compose, Middleware } from 'compose-middleware';
 import { NextFunction, Request, Response } from 'express';
+import { NO_CONTENT, OK } from 'http-status-codes';
 import { mapValues, omit, values } from 'lodash';
 import httpContext from './httpContext';
 
@@ -8,9 +9,9 @@ type SimpleHandler = (req: Request, res: Response) => any;
 type WriteResponse = (req: Request, res: Response, data?: any) => any;
 const writeResponse: WriteResponse = (_req, res, data) => res.json(data);
 
-const respond = (
+export const respond = (
     controllerHandler: SimpleHandler,
-    statusCode = 200,
+    statusCode = OK,
     respondFn: WriteResponse = writeResponse
 ): Handler => async (req, res, next) => {
     try {
@@ -22,17 +23,25 @@ const respond = (
     }
 };
 
-const omitOrder = (o: any) => omit(o, ['order']);
-const omitPagination = (o: any) => omit(o, ['limit', 'offset']);
+export const respondWithEmpty = (_req: Request, res: Response, data?: any) => {
+    if (Array.isArray(data) && data.length === 0) {
+        res.status(NO_CONTENT);
+        return res.end();
+    }
+    return res.json(data);
+};
 
-const pipeMiddleware = (...middlewares: Array<Middleware<Request, Response>>) => compose(middlewares);
+export const omitOrder = (o: any) => omit(o, ['order']);
+export const omitPagination = (o: any) => omit(o, ['limit', 'offset']);
 
-const bindContext = (req: Request, res: Response, next: NextFunction) => {
+export const pipeMiddleware = (...middlewares: Array<Middleware<Request, Response>>) => compose(middlewares);
+
+export const bindContext = (req: Request, res: Response, next: NextFunction) => {
     req.context = httpContext({ req, res });
     next();
 };
 
-const meTranslate = (req: Request, res: Response, next: NextFunction) => {
+export const meTranslate = (req: Request, res: Response, next: NextFunction) => {
     const context = req.context || httpContext({ req, res });
 
     if (!context.user) {
@@ -52,5 +61,3 @@ const meTranslate = (req: Request, res: Response, next: NextFunction) => {
 
     next();
 };
-
-export { respond, omitOrder, omitPagination, pipeMiddleware, bindContext, meTranslate };
