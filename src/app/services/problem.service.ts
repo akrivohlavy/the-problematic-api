@@ -1,5 +1,6 @@
 import { HttpContext } from 'app/controllers/utils/httpContext';
-import { NotFound, NotModified } from '../errors/classes';
+import { E_CODES } from '../errors';
+import { NotAuthorized, NotFound, NotModified } from '../errors/classes';
 import Problem from '../models/Problem';
 
 const problemToSchema = ({ id, type, query, createdBy = 'unknown', answered = false }: Problem) => ({
@@ -20,10 +21,11 @@ const loadProblem = async (id: number): Promise<Problem> => {
 
 export const createProblem = async (_params: any, context: HttpContext) => {
     const { type, query } = context.payload;
+    const { username } = context.user || {};
     const newProblem = await Problem.create({
         type,
         query,
-        createdBy: context.user || 'unknown',
+        createdBy: username,
         answered: false,
     });
     return problemToSchema(newProblem);
@@ -43,15 +45,22 @@ export const updateProblem = async (_params: any, context: HttpContext) => {
     const { type, query } = context.payload;
     const problem = await loadProblem(_params.id);
 
-    // TODO: replace naive comparison and assignment with iteration
-    if (type === problem.type && query === problem.query) {
-        throw new NotModified();
+    if (problem.createdBy !== (context.user && context.user.username)) {
+        throw new NotAuthorized(E_CODES.e4002);
     }
+
+    if (type === problem.type && query === problem.query) {
+        throw new NotModified(E_CODES.e0001);
+    }
+
     await problem.update({ type, query });
     return problemToSchema(problem);
 };
 
-export const deleteProblem = async (_params: any) => {
+export const deleteProblem = async (_params: any, context: HttpContext) => {
     const problem = await loadProblem(_params.id);
+    if (problem.createdBy !== (context.user && context.user.username)) {
+        throw new NotAuthorized(E_CODES.e4002);
+    }
     await problem.destroy(); // this is in fact a soft-delete by default
 };
