@@ -33,8 +33,10 @@
     "usePathForSuiteName": "true"
   },
   "dependencies": {
+    "@types/basic-auth": "^1.1.2",
     "@types/express": "^4.16.1",
     "@types/lodash": "^4.14.138",
+    "basic-auth": "^2.0.1",
     "compose-middleware": "^5.0.1",
     "configuru": "^0.2.2",
     "cosmas": "^1.1.0",
