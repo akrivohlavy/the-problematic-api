@@ -64,3 +64,15 @@ export const deleteProblem = async (_params: any, context: HttpContext) => {
     }
     await problem.destroy(); // this is in fact a soft-delete by default
 };
+
+export const answerProblem = async (_params: any, context: HttpContext) => {
+    const { answer } = context.payload;
+    const problem = await loadProblem(_params.id);
+
+    const correctAnswer = problem.getAnswer();
+    const answeredCorrectly = correctAnswer === answer; // TODO: replace with safe compare
+    if (!problem.answered && answeredCorrectly) {
+        await problem.update({ answered: true });
+    }
+    return { answer, correct: answeredCorrectly };
+};

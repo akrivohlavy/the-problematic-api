@@ -15,6 +15,7 @@ const configSchema = {
     server: {
         port: loader.number('SERVER_PORT'),
     },
+    answerToEverything: loader.string('THE_ANSWER_TO_LIFE_THE_UNIVERSE_AND_EVERYTHING'),
 };
 
 export default values(configSchema);

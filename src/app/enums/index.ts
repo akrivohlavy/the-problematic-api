@@ -1,6 +1,9 @@
 export enum withRelated {}
 // related entities
-export enum businessEnums {}
+export enum ProblemType {
+    riddle,
+    expression,
+}
 // business model enums
 
 export default {
