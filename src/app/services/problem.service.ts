@@ -2,14 +2,7 @@ import { HttpContext } from 'app/controllers/utils/httpContext';
 import { E_CODES } from '../errors';
 import { NotAuthorized, NotFound, NotModified } from '../errors/classes';
 import Problem from '../models/Problem';
-
-const problemToSchema = ({ id, type, query, createdBy = 'unknown', answered = false }: Problem) => ({
-    id,
-    type,
-    query,
-    createdBy,
-    answered,
-});
+import { problemToSchema, safeCompareAnswers } from './utils/problemServiceUtils';
 
 const loadProblem = async (id: number): Promise<Problem> => {
     const problem = await Problem.findByPk(id);
@@ -63,4 +56,16 @@ export const deleteProblem = async (_params: any, context: HttpContext) => {
         throw new NotAuthorized(E_CODES.e4002);
     }
     await problem.destroy(); // this is in fact a soft-delete by default
+};
+
+export const answerProblem = async (_params: any, context: HttpContext) => {
+    const { answer } = context.payload;
+    const problem = await loadProblem(_params.id);
+    const correctAnswer = problem.getAnswer();
+
+    const answeredCorrectly = safeCompareAnswers(answer, correctAnswer);
+    if (!problem.answered && answeredCorrectly) {
+        await problem.update({ answered: true });
+    }
+    return { answer, correctAnswer, correct: answeredCorrectly };
 };

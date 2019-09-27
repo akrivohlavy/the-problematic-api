@@ -14,11 +14,16 @@ declare module 'ackee-node-logger' {
     export const warn: LogFunction;
 }
 
-// Extends express request interrface for app-required types
+// Extends express request interface for app-required types
 declare namespace Express {
     export interface Request {
         user?: any;
         i18n?: any;
         context?: any;
     }
+}
+
+declare module 'math-expression-evaluator' {
+    // @ts-ignore
+    export const eval: (expression: string) => number;
 }
