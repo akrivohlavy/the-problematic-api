@@ -1,9 +1,13 @@
 import { DataTypes, Model } from 'sequelize';
 import config from '../../config/config';
 import { ProblemType } from '../enums';
+import { E_CODES } from '../errors';
+import { solveExpression } from '../services/expressionSolver.service';
 import { sequelize } from './index';
 
 const tableName = 'problems';
+
+export type Answer = string | number;
 
 export default class Problem extends Model {
     public id!: number;
@@ -12,13 +16,14 @@ export default class Problem extends Model {
     public createdBy!: string;
     public answered!: boolean;
 
-    public getAnswer() {
+    public getAnswer(): Answer {
         switch (this.type) {
             case ProblemType[ProblemType.riddle]:
                 return config.answerToEverything;
             case ProblemType[ProblemType.expression]:
-                return true; // here be arithmetic expression solver
+                return solveExpression(this.query);
         }
+        throw new Error(E_CODES.e0002);
     }
 }
 
