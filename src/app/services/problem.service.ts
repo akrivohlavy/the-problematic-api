@@ -1,4 +1,5 @@
 import { HttpContext } from 'app/controllers/utils/httpContext';
+import { ProblemType } from '../enums';
 import { E_CODES } from '../errors';
 import { NotAuthorized, NotFound, NotModified } from '../errors/classes';
 import Problem from '../models/Problem';
@@ -24,8 +25,17 @@ export const createProblem = async (_params: any, context: HttpContext) => {
     return problemToSchema(newProblem);
 };
 
-export const listProblems = async (_params: any) => {
-    const problems = await Problem.findAll();
+export const listProblems = async (params: any) => {
+    const { type, answered } = params;
+    const where: any = {};
+    if (type) {
+        where.type = ProblemType[type];
+    }
+    if (answered) {
+        where.answered = Boolean(answered);
+    }
+
+    const problems = await Problem.findAll({ where });
     return problems.map(problemToSchema);
 };
 
