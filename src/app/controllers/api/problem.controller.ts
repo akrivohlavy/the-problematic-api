@@ -24,5 +24,5 @@ export const updateProblem = pipeMiddleware(
 
 export const deleteProblem = pipeMiddleware(
     bindContext,
-    respond(({ context }) => problemService.deleteProblem(context.params), NO_CONTENT)
+    respond(({ context }) => problemService.deleteProblem(context.params, context), NO_CONTENT)
 );

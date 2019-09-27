@@ -9,8 +9,7 @@ export default (app: ReturnType<typeof createServer>) => {
     router.all('/', defaultRootHandler);
     router.use(healthz);
 
-    router.use(basicAuthMiddleware);
-    router.use('/api', jsonParser(), /*basicAuthMiddleware,*/ apiRoutes);
+    router.use('/api', basicAuthMiddleware, jsonParser(), apiRoutes);
 
     router.use(httpErrorResponder);
     router.use(defaultFinalHandler);

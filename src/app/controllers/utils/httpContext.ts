@@ -2,7 +2,8 @@ import { Request, Response } from 'express';
 import { defaults, get } from 'lodash';
 
 interface DefaultUser {
-    id: any;
+    id?: any;
+    username: string;
 }
 
 // Context for all incoming messages

@@ -1,9 +1,11 @@
 import { mapValues } from 'lodash';
 
 enum ErrorCodes {
-    TEMPLATE_TEST = 'Unicorn cries',
+    // general errors
     e0000 = "I'm a teapot",
-    e2 = '',
+    e0001 = 'Question already is the same.',
+    // auth errors
+    e4002 = 'Only user that created a Problem is allowed to modify it.',
 }
 
 // Type hacking for simplified error notation and code suggestions
