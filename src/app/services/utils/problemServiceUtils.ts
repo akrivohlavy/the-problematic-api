@@ -10,11 +10,9 @@ export const problemToSchema = ({ id, type, query, createdBy, answered = false }
 
 export const safeCompareAnswers = (userAnswer: Answer, correctAnswer: Answer): boolean => {
     if (typeof correctAnswer === 'number') {
-        console.log('comparing as number', correctAnswer, userAnswer);
         return correctAnswer === +userAnswer;
     }
     if (typeof correctAnswer === 'string') {
-        console.log('comparing as string', correctAnswer, userAnswer);
         const compareOptions = {
             sensitivity: 'base',
             ignorePunctuation: true,
