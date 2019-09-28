@@ -2,8 +2,9 @@ import { HttpContext } from 'app/controllers/utils/httpContext';
 import { ProblemType } from '../enums';
 import { E_CODES } from '../errors';
 import { NotAuthorized, NotFound, NotModified } from '../errors/classes';
+import Answer from '../models/Answer';
 import Problem from '../models/Problem';
-import { problemToSchema, safeCompareAnswers } from './utils/problemServiceUtils';
+import { filterAnswered, problemToSchema, safeCompareAnswers } from './utils/problemServiceUtils';
 
 const loadProblem = async (id: number): Promise<Problem> => {
     const problem = await Problem.findByPk(id);
@@ -20,22 +21,31 @@ export const createProblem = async (_params: any, context: HttpContext) => {
         type,
         query,
         createdBy: username,
-        answered: false,
     });
     return problemToSchema(newProblem);
 };
 
-export const listProblems = async (params: any) => {
-    const { type, answered } = params;
+export const listProblems = async (params: any, context: HttpContext) => {
+    const { username } = context.user || {};
     const where: any = {};
-    if (type) {
-        where.type = ProblemType[type];
-    }
-    if (answered) {
-        where.answered = Boolean(answered);
+    const include: any = [
+        {
+            model: Answer,
+            where: { username },
+            required: false,
+        },
+    ];
+
+    if (params.type) {
+        where.type = ProblemType[params.type];
     }
 
-    const problems = await Problem.findAll({ where });
+    let problems = await Problem.findAll({ where, include });
+
+    if (params.answered) {
+        problems = problems.filter(filterAnswered(params.answered === 'true'));
+    }
+
     return problems.map(problemToSchema);
 };
 
@@ -69,13 +79,16 @@ export const deleteProblem = async (_params: any, context: HttpContext) => {
 };
 
 export const answerProblem = async (_params: any, context: HttpContext) => {
-    const { answer } = context.payload;
-    const problem = await loadProblem(_params.id);
-    const correctAnswer = problem.getAnswer();
+    const { answer: submittedAnswer } = context.payload;
+    const { username } = context.user || {};
 
-    const answeredCorrectly = safeCompareAnswers(answer, correctAnswer);
-    if (!problem.answered && answeredCorrectly) {
-        await problem.update({ answered: true });
+    const problem = await loadProblem(_params.id);
+    const correctAnswer = problem.getSolution();
+    const answeredCorrectly = safeCompareAnswers(submittedAnswer, correctAnswer);
+
+    if (answeredCorrectly) {
+        const answer = await Answer.create({ username });
+        await answer.setProblem(problem);
     }
-    return { answer, correctAnswer, correct: answeredCorrectly };
+    return { answer: submittedAnswer, correct: answeredCorrectly };
 };

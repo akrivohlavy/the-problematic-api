@@ -1,14 +1,13 @@
-import Problem, { Answer } from '../../models/Problem';
+import Problem, { Solution } from '../../models/Problem';
 
-export const problemToSchema = ({ id, type, query, createdBy, answered = false }: Problem) => ({
+export const problemToSchema = ({ id, type, query, createdBy }: Problem) => ({
     id,
     type,
     query,
     createdBy,
-    answered,
 });
 
-export const safeCompareAnswers = (userAnswer: Answer, correctAnswer: Answer): boolean => {
+export const safeCompareAnswers = (userAnswer: Solution, correctAnswer: Solution): boolean => {
     if (typeof correctAnswer === 'number') {
         return correctAnswer === +userAnswer;
     }
@@ -21,4 +20,9 @@ export const safeCompareAnswers = (userAnswer: Answer, correctAnswer: Answer): b
         return (correctAnswer as string).localeCompare(userAnswer as string, undefined, compareOptions) === 0;
     }
     throw new TypeError(`Cannot safely compare unexpected type: ${typeof correctAnswer}`);
+};
+
+export const filterAnswered = (keepAnswered: boolean) => (problem: Problem): boolean => {
+    const userAnswersCount = problem.Answers.length || 0;
+    return keepAnswered ? userAnswersCount > 0 : userAnswersCount === 0;
 };

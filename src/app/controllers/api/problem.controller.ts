@@ -4,7 +4,7 @@ import { bindContext, pipeMiddleware, respond, respondWithEmpty } from '../utils
 
 export const listProblems = pipeMiddleware(
     bindContext,
-    respond(({ context }) => problemService.listProblems(context.params), OK, respondWithEmpty)
+    respond(({ context }) => problemService.listProblems(context.params, context), OK, respondWithEmpty)
 );
 
 export const createProblem = pipeMiddleware(
