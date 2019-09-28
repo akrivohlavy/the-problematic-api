@@ -1,4 +1,5 @@
-import { safeCompareAnswers } from '../../app/services/utils/problemServiceUtils';
+import { filterAnswered, safeCompareAnswers } from '../../app/services/utils/problemServiceUtils';
+import problemsMock from './mocks/problems';
 
 describe('Problem Service (Unit)', () => {
     describe('safe answer comparison', () => {
@@ -22,6 +23,16 @@ describe('Problem Service (Unit)', () => {
 
         it('ignores whitespaces and punctuation', () => {
             expect(safeCompareAnswers(' no \tproblem! ', 'No problem.')).toBeTrue();
+        });
+    });
+
+    describe('filtering list of Problems based on user answers', () => {
+        it('filters answered question', () => {
+            expect(problemsMock.filter(filterAnswered(true))).toMatchSnapshot();
+        });
+
+        it('filters unanswered question', () => {
+            expect(problemsMock.filter(filterAnswered(false))).toMatchSnapshot();
         });
     });
 });
