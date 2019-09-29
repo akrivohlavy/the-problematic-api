@@ -6,23 +6,14 @@ import { aBetterProblemMock, createProblemMock, expressionMock, otherUserMock, u
 
 describe('Problems (Integration)', () => {
     describe('API', () => {
-        it('is protected by Basic Auth', async () => {
-            await request(app)
+        it('is protected by Basic Auth', () => {
+            return request(app)
                 .get('/api/problems')
                 .send(createProblemMock)
                 .expect(401)
                 .then(({ headers }: any) => {
                     expect(headers).toHaveProperty('www-authenticate');
                     expect(headers['www-authenticate']).toStartWith('Basic');
-                });
-
-            await request(app)
-                .get('/api/problems')
-                .auth(userMock.username, userMock.password)
-                .then(({ status }: any) => {
-                    expect(status)
-                        .toBeGreaterThanOrEqual(200)
-                        .toBeLessThanOrEqual(299);
                 });
         });
     });

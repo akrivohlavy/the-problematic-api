@@ -2,7 +2,6 @@
 
 exports[`Problems (Integration) User can create a riddle Problem 1`] = `
 Object {
-  "answered": false,
   "createdBy": "user1",
   "id": 1,
   "query": "How much wood would a woodchuck chuck if a woodchuck could chuck wood?",
@@ -12,7 +11,6 @@ Object {
 
 exports[`Problems (Integration) User can create an expression Problem 1`] = `
 Object {
-  "answered": false,
   "createdBy": "user1",
   "id": 2,
   "query": "5+5",
@@ -23,14 +21,12 @@ Object {
 exports[`Problems (Integration) User can list Problems 1`] = `
 Array [
   Object {
-    "answered": false,
     "createdBy": "user1",
     "id": 1,
     "query": "How much wood would a woodchuck chuck if a woodchuck could chuck wood?",
     "type": "riddle",
   },
   Object {
-    "answered": false,
     "createdBy": "user1",
     "id": 2,
     "query": "5+5",
@@ -42,7 +38,6 @@ Array [
 exports[`Problems (Integration) User can list Problems filtered by type 1`] = `
 Array [
   Object {
-    "answered": false,
     "createdBy": "user1",
     "id": 1,
     "query": "How much wood would a woodchuck chuck if a woodchuck could chuck wood?",
