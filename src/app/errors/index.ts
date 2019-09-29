@@ -6,7 +6,8 @@ enum ErrorCodes {
     e0000 = "I'm a teapot",
     e0001 = 'Question already is the same.',
     e0002 = 'Unknown problem type.',
-    // auth errors
+
+    e4000 = 'Validation error.',
     e4002 = 'Only user that created a Problem is allowed to modify it.',
 }
 
