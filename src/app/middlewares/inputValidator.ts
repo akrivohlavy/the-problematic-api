@@ -13,7 +13,7 @@ export default function createValidator(schema: object): Middleware<Request, Res
         const { payload } = context;
 
         if (!validate(payload)) {
-            next(new BadRequest(E_CODES.e4000, [validate.errors]));
+            return next(new BadRequest(E_CODES.e4000, [validate.errors]));
         }
 
         next();

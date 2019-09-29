@@ -1,6 +1,7 @@
 import * as auth from 'basic-auth';
 import { NextFunction, Request, Response } from 'express';
-import { UNAUTHORIZED } from 'http-status-codes';
+import { E_CODES } from '../errors';
+import { NotAuthenticated } from '../errors/classes';
 
 /**
  * Stubby username and password authentication method.
@@ -22,7 +23,7 @@ export default async function basicAuthMiddleware(req: Request, res: Response, n
 
     if (!credentials || !(await verifyCredentials(credentials.name, credentials.pass))) {
         res.setHeader('WWW-Authenticate', 'Basic realm="protected-api"');
-        return res.status(UNAUTHORIZED).end();
+        return next(new NotAuthenticated(E_CODES.e4001));
     }
 
     req.user = await getUser(credentials.name);

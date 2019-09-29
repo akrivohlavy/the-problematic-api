@@ -8,6 +8,7 @@ enum ErrorCodes {
     e0002 = 'Unknown problem type.',
 
     e4000 = 'Validation error.',
+    e4001 = 'Not Authenticated.',
     e4002 = 'Only user that created a Problem is allowed to modify it.',
 }
 
