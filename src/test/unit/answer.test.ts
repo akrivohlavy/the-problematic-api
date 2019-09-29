@@ -1,5 +1,5 @@
 import { filterAnswered, safeCompareAnswers } from '../../app/services/utils/problemServiceUtils';
-import problemsMock from './mocks/problems';
+import problemsMock from './__mocks__/problems';
 
 describe('Problem Service (Unit)', () => {
     describe('safe answer comparison', () => {

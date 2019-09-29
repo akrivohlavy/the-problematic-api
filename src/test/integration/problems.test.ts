@@ -2,31 +2,7 @@ import * as request from 'supertest-as-promised';
 
 import app from 'server';
 import Problem from '../../app/models/Problem';
-
-const createProblemMock = {
-    type: 'riddle',
-    query: 'How much wood would a woodchuck chuck if a woodchuck could chuck wood?',
-};
-
-const aBetterProblemMock = {
-    type: 'riddle',
-    query: 'Where’s the peck of pickled peppers Peter Piper picked?',
-};
-
-const expressionMock = {
-    type: 'expression',
-    query: '5+5',
-};
-
-const userMock = {
-    username: 'user1',
-    password: 'pass',
-};
-
-const otherUserMock = {
-    username: 'user2',
-    password: 'pass',
-};
+import { aBetterProblemMock, createProblemMock, expressionMock, otherUserMock, userMock } from './__mocks__/problems';
 
 describe('Problems (Integration)', () => {
     describe('API', () => {
