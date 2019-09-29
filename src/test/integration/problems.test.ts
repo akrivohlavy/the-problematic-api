@@ -2,26 +2,7 @@ import * as request from 'supertest-as-promised';
 
 import app from 'server';
 import Problem from '../../app/models/Problem';
-
-const createProblemMock = {
-    type: 'riddle',
-    query: 'How much wood would a woodchuck chuck if a woodchuck could chuck wood?',
-};
-
-const aBetterProblemMock = {
-    type: 'riddle',
-    query: 'Where’s the peck of pickled peppers Peter Piper picked?',
-};
-
-const userMock = {
-    username: 'user1',
-    password: 'pass',
-};
-
-const otherUserMock = {
-    username: 'user2',
-    password: 'pass',
-};
+import { aBetterProblemMock, createProblemMock, expressionMock, otherUserMock, userMock } from './__mocks__/problems';
 
 describe('Problems (Integration)', () => {
     describe('API', () => {
@@ -47,9 +28,10 @@ describe('Problems (Integration)', () => {
     });
 
     describe('User can', () => {
-        let tempProblem: Problem;
+        let tempRiddle: Problem;
+        let tempExpression: Problem;
 
-        it('create a Problem', () => {
+        it('create a riddle Problem', () => {
             return request(app)
                 .post('/api/problems')
                 .auth(userMock.username, userMock.password)
@@ -57,7 +39,19 @@ describe('Problems (Integration)', () => {
                 .expect(200)
                 .then(({ body }: any) => {
                     expect(body).toMatchSnapshot();
-                    tempProblem = body;
+                    tempRiddle = body;
+                });
+        });
+
+        it('create an expression Problem', () => {
+            return request(app)
+                .post('/api/problems')
+                .auth(userMock.username, userMock.password)
+                .send(expressionMock)
+                .expect(200)
+                .then(({ body }: any) => {
+                    expect(body).toMatchSnapshot();
+                    tempExpression = body;
                 });
         });
 
@@ -71,29 +65,40 @@ describe('Problems (Integration)', () => {
                 });
         });
 
-        it('read Problem', () => {
+        it('list Problems filtered by type', () => {
             return request(app)
-                .get(`/api/problems/${tempProblem.id}`)
+                .get('/api/problems')
+                .query({ type: 'riddle' })
                 .auth(userMock.username, userMock.password)
                 .expect(200)
                 .then(({ body }: any) => {
-                    expect(body).toEqual(tempProblem);
+                    expect(body).toMatchSnapshot();
+                });
+        });
+
+        it('read Problem', () => {
+            return request(app)
+                .get(`/api/problems/${tempRiddle.id}`)
+                .auth(userMock.username, userMock.password)
+                .expect(200)
+                .then(({ body }: any) => {
+                    expect(body).toEqual(tempRiddle);
                 });
         });
 
         it('update Problem', async () => {
             await request(app)
-                .put(`/api/problems/${tempProblem.id}`)
+                .put(`/api/problems/${tempRiddle.id}`)
                 .auth(userMock.username, userMock.password)
                 .send(aBetterProblemMock)
                 .expect(200)
                 .then(({ body }: any) => {
                     expect(body.query).toEqual(aBetterProblemMock.query);
-                    expect(body.id).toEqual(tempProblem.id);
+                    expect(body.id).toEqual(tempRiddle.id);
                 });
 
             await request(app)
-                .put(`/api/problems/${tempProblem.id}`)
+                .put(`/api/problems/${tempRiddle.id}`)
                 .auth(userMock.username, userMock.password)
                 .send(aBetterProblemMock)
                 .expect(304);
@@ -101,7 +106,7 @@ describe('Problems (Integration)', () => {
 
         it('not modify Problem created by other user', async () => {
             await request(app)
-                .put(`/api/problems/${tempProblem.id}`)
+                .put(`/api/problems/${tempRiddle.id}`)
                 .auth(otherUserMock.username, otherUserMock.password)
                 .send(createProblemMock)
                 .expect(403);
@@ -109,15 +114,20 @@ describe('Problems (Integration)', () => {
 
         it('not delete Problem created by other user', async () => {
             await request(app)
-                .delete(`/api/problems/${tempProblem.id}`)
+                .delete(`/api/problems/${tempRiddle.id}`)
                 .auth(otherUserMock.username, otherUserMock.password)
                 .send(createProblemMock)
                 .expect(403);
         });
 
-        it('delete Problem', async () => {
+        it('delete Problems', async () => {
             await request(app)
-                .delete(`/api/problems/${tempProblem.id}`)
+                .delete(`/api/problems/${tempRiddle.id}`)
+                .auth(userMock.username, userMock.password)
+                .expect(204);
+
+            await request(app)
+                .delete(`/api/problems/${tempExpression.id}`)
                 .auth(userMock.username, userMock.password)
                 .expect(204);
 
