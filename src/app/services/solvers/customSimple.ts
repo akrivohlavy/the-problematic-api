@@ -2,11 +2,12 @@
  * Super simple arithmetic expression solver
  *
  * supports:
- *  - braces
+ *  - brackets
  *  - addition
  *  - subtraction
  *  - multiplication
  *  - division
+ * (in this order of precedence)
  *
  *  does not support unary operators
  */
@@ -14,31 +15,39 @@
 import { IExpressionSolver } from '../expressionSolver.service';
 
 export const splitByOperator = (expression: string, operator: string): string[] => {
-    expression = expression.replace(/\s/g, '');
-    const braces = [expression.indexOf('('), expression.lastIndexOf(')')];
+    const result = [];
+    let buffer = '';
+    let bracketDepth = 0;
 
-    if (braces[0] > -1) {
-        const before = expression.substring(0, braces[0]);
-        const bracedPart = expression.substring(braces[0], braces[1] + 1);
-        const after = expression.substring(braces[1] + 1, expression.length);
-
-        const result = [...before.split(operator)];
-        if (before.endsWith(operator)) {
-            result.push(bracedPart);
-        } else {
-            result[result.length - 1] += bracedPart;
+    for (const char of expression) {
+        switch (char) {
+            case ' ':
+                break;
+            case '(':
+                bracketDepth += 1;
+                buffer += char;
+                break;
+            case ')':
+                bracketDepth -= 1;
+                buffer += char;
+                break;
+            case operator:
+                if (bracketDepth === 0) {
+                    result.push(buffer);
+                    buffer = '';
+                } else {
+                    buffer += char;
+                }
+                break;
+            default:
+                buffer += char;
         }
-        if (after.startsWith(operator)) {
-            result.push(...after.split(operator));
-        } else {
-            const [a, ...rest] = after.split(operator);
-            result[result.length - 1] += a;
-            result.push(...rest);
-        }
-        return result.filter(s => s);
+    }
+    if (buffer !== '') {
+        result.push(buffer);
     }
 
-    return expression.split(operator);
+    return result;
 };
 
 const parseAtom = (expression: string, parseBracesCallback: { (expression: string): number }): number => {
