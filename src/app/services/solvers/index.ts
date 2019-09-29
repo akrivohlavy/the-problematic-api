@@ -8,4 +8,4 @@ export * from './mathExpressionEvaluator';
 export * from './mathjs';
 
 // Custom solvers
-// TODO
+export * from './customSimple';

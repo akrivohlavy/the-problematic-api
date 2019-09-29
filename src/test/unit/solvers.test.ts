@@ -1,27 +1,37 @@
-import { MathExpressionEvaluator, Mathjs } from 'app/services/solvers';
-import { IExpressionSolver } from '../../app/services/expressionSolver.service';
+import { CustomSimpleSolver, MathExpressionEvaluator, Mathjs } from 'app/services/solvers';
 
 const testCases = [
-    { q: '1+1', a: 2 },
-    { q: '3 - 1', a: 2 },
-    { q: '2 * 5', a: 10 },
-    { q: '3 - 1 + 5', a: 7 },
-    { q: '1- (10/5)* 2 +7', a: 4 },
+    ['1 + 1', 2],
+    ['3 - 2', 1],
+    ['10 - 10', 0],
+    ['3 - 1', 2],
+    ['2 * 5', 10],
+    ['3 - 1 + 5', 7],
+    ['2 * 3 + 4', 10],
+    ['1- (10/5)* 2 +7', 4],
 ];
-
-const runTestCases = (solver: IExpressionSolver) => {
-    for (const { q, a } of testCases) {
-        expect(solver.solve(q)).toEqual(a);
-    }
-};
 
 describe('Arithmetic expression solvers (Unit)', () => {
     describe('solver modules can solver prepared test cases', () => {
-        it('math-expression-evaluator', () => {
-            runTestCases(new MathExpressionEvaluator());
+        describe('math-expression-evaluator', () => {
+            const solver = new MathExpressionEvaluator();
+            it.each(testCases)('%s', (q, a) => {
+                expect(solver.solve(`${q}`)).toEqual(a);
+            });
         });
-        it('mathjs', () => {
-            runTestCases(new Mathjs());
+
+        describe('mathjs', () => {
+            const solver = new Mathjs();
+            it.each(testCases)('%s', (q, a) => {
+                expect(solver.solve(`${q}`)).toEqual(a);
+            });
+        });
+
+        describe('custom simple solver', () => {
+            const solver = new CustomSimpleSolver();
+            it.each(testCases)('%s', (q, a) => {
+                expect(solver.solve(`${q}`)).toEqual(a);
+            });
         });
     });
 });
