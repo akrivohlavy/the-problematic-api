@@ -1,8 +1,9 @@
 {
   "name": "the-problematic-api",
   "description": "Problems? We GET them. Answers? You POST them.",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "author": "Antonin Krivohlavy <antonin.krivohlavy@gmail.com",
+  "homepage": "https://github.com/tond4/the-problematic-api",
   "engines": {
     "node": "^12.4.0"
   },
