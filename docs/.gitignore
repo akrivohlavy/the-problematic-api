@@ -1,3 +1,2 @@
 # ignore generated files
-all.apib
-swagger.json
+openapi.json

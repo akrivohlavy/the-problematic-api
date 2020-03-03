@@ -1,0 +1,9 @@
+type: object
+required:
+  - type
+  - query
+properties:
+  type:
+    type: string
+  query:
+    type: string

@@ -1,0 +1,104 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Problems
+  license:
+    name: MIT
+servers:
+  - url: http://localhost:3000/api
+
+paths:
+  /problems:
+    get:
+      summary: List all problems
+      operationId: listProblems
+      tags:
+        - Problems
+      parameters:
+        - name: limit
+          in: query
+          description: How many items to return at one time
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+      responses:
+        '200':
+          description: A paged array of problems
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/problems.yaml'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/error.yaml'
+    post:
+      summary: Create a problem
+      operationId: createProblem
+      tags:
+        - Problem
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/createProblem.yaml'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/problem.yaml'
+  /problems/{id}:
+    parameters:
+      - name: id
+        in: path
+        schema:
+          type: number
+        required: true
+    get:
+      summary: A Problem contains information about the type of problem, its query and whether it has been correctly answered.
+      operationId: getProblem
+      tags:
+        - Problem
+      responses:
+        '200':
+          description: A problem
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/problem.yaml'
+    put:
+      summary: Update a problem
+      operationId: updateProblem
+      tags:
+        - Problem
+      responses:
+        '200':
+          description: Succsessfully updated
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/problem.yaml'
+    delete:
+      summary: Delete a problem
+      operationId: deleteProblem
+      tags:
+        - Problem
+      responses:
+        '200':
+          description: Successfully deleted
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+security:
+  - basicAuth: []

@@ -1,0 +1,12 @@
+type: object
+properties:
+  id:
+    type: integer
+    readOnly: true
+  type:
+    type: string
+  query:
+    type: string
+  createdBy:
+    type: string
+    readOnly: true
