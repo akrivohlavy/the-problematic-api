@@ -1,17 +1,17 @@
 import * as problemService from 'app/services/problem.service';
 import { NO_CONTENT, OK } from 'http-status-codes';
-import * as createProblemSchema from '../../../schemas/createProblem.json';
-import createValidator from '../../middlewares/inputValidator';
+import { createRequestValidator } from '../../middlewares/inputValidator';
 import { bindContext, pipeMiddleware, respond, respondWithEmpty } from '../utils/controllerUtils';
 
 export const listProblems = pipeMiddleware(
     bindContext,
+    createRequestValidator('listProblems'),
     respond(({ context }) => problemService.listProblems(context.params, context), OK, respondWithEmpty)
 );
 
 export const createProblem = pipeMiddleware(
     bindContext,
-    createValidator(createProblemSchema),
+    // createRequestValidator('createProblem'),
     respond(({ context }) => problemService.createProblem(context.params, context))
 );
 
@@ -22,7 +22,6 @@ export const getProblem = pipeMiddleware(
 
 export const updateProblem = pipeMiddleware(
     bindContext,
-    createValidator(createProblemSchema),
     respond(({ context }) => problemService.updateProblem(context.params, context))
 );
 
